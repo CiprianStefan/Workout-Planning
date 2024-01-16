@@ -1,5 +1,8 @@
 package com.example.workoutplanning.activities.services;
 
+import com.example.workoutplanning.achievements.repositories.AchievementDataRepository;
+import com.example.workoutplanning.achievements.repositories.AchievementRepository;
+import com.example.workoutplanning.achievements.services.AchievementService;
 import com.example.workoutplanning.activities.model.Activity;
 import com.example.workoutplanning.activities.repositories.ActivityRepository;
 import com.example.workoutplanning.goals.repositories.GoalRepository;
@@ -7,6 +10,7 @@ import com.example.workoutplanning.goals.services.GoalService;
 import com.example.workoutplanning.users.model.User;
 import com.example.workoutplanning.users.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.tags.form.AbstractCheckedElementTag;
 
 @Service
 public class ActivityServiceImpl implements ActivityService{
@@ -14,10 +18,12 @@ public class ActivityServiceImpl implements ActivityService{
     ActivityRepository activityRepository;
     UserRepository userRepository;
     GoalRepository goalRepository;
-    public ActivityServiceImpl(ActivityRepository activityRepository, UserRepository userRepository, GoalRepository goalRepository) {
+    AchievementDataRepository achievementDataRepository;
+    public ActivityServiceImpl(ActivityRepository activityRepository, UserRepository userRepository, GoalRepository goalRepository, AchievementDataRepository achievementDataRepository) {
         this.activityRepository = activityRepository;
         this.userRepository = userRepository;
         this.goalRepository = goalRepository;
+        this.achievementDataRepository = achievementDataRepository;
     }
 
     @Override
@@ -30,7 +36,12 @@ public class ActivityServiceImpl implements ActivityService{
         activityRepository.save(activity);
         int goalsUpdated = goalRepository.updateGoalProgress(user_id,exercise_id);
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,exercise_id);
-        return "Activity created! \n Goals updated: " + goalsUpdated + "! \n Goals completed: " + goalsCompleted + "!";
+        int achievementsUpdated = achievementDataRepository.updateAchievementsData(user_id,exercise_id);
+        achievementDataRepository.updateAchievementCompetition(user_id);
+        return "Activity deleted! \n Goals updated: " + goalsUpdated
+                + "! \n Goals completed: " + goalsCompleted
+                + "! \n Achievements updated: " + achievementsUpdated
+                + "!";
     }
 
     @Override
@@ -72,7 +83,12 @@ public class ActivityServiceImpl implements ActivityService{
                 units);
         int goalsUpdated = goalRepository.updateGoalProgress(user_id,exercise_id);
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,exercise_id);
-        return "Activity updated! \n Goals updated: " + goalsUpdated + "! \n Goals completed: " + goalsCompleted + "!";
+        int achievementsUpdated = achievementDataRepository.updateAchievementsData(user_id,exercise_id);
+        achievementDataRepository.updateAchievementCompetition(user_id);
+        return "Activity deleted! \n Goals updated: " + goalsUpdated
+                + "! \n Goals completed: " + goalsCompleted
+                + "! \n Achievements updated: " + achievementsUpdated
+                + "!";
     }
 
     @Override
@@ -86,6 +102,13 @@ public class ActivityServiceImpl implements ActivityService{
             throw new RuntimeException("Activity not found!");
         }
         activityRepository.deleteById((long) activity_id);
-        return "Activity deleted!";
+        int goalsUpdated = goalRepository.updateGoalProgress(user_id,activity.getExercise_id());
+        int goalsCompleted = goalRepository.updateGoalCompletion(user_id,activity.getExercise_id());
+        int achievementsUpdated = achievementDataRepository.updateAchievementsData(user_id,activity.getExercise_id());
+        achievementDataRepository.updateAchievementCompetition(user_id);
+        return "Activity deleted! \n Goals updated: " + goalsUpdated
+                + "! \n Goals completed: " + goalsCompleted
+                + "! \n Achievements updated: " + achievementsUpdated
+                + "!";
     }
 }

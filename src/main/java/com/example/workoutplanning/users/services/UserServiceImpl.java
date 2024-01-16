@@ -1,5 +1,6 @@
 package com.example.workoutplanning.users.services;
 
+import com.example.workoutplanning.achievements.services.AchievementService;
 import com.example.workoutplanning.users.model.User;
 import com.example.workoutplanning.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository) {
+    AchievementService achievementService;
+    public UserServiceImpl(UserRepository userRepository, AchievementService achievementService) {
         this.userRepository = userRepository;
+        this.achievementService = achievementService;
     }
 
     @Override
@@ -27,7 +30,8 @@ public class UserServiceImpl implements UserService{
         user.setUsername(Username);
         user.setEmail(Email);
         user.setPassword(Password);
-        userRepository.save(user);
+        User userCreated = userRepository.save(user);
+        achievementService.initAchievementsDataForUser(userCreated.getId());
         return "User created!";
     }
 
