@@ -18,10 +18,7 @@ public class UserDataServiceImpl implements UserDataService {
 
     @Override
     public String createUserData(UserData userData) {
-        User user = userRepository.findById((long) userData.getUserid()).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) userData.getUserid());
         UserData userDataCheck = userDataRepository.findByUserid(userData.getUserid());
         if (userDataCheck != null){
             throw new RuntimeException("User data already exists!");
@@ -32,24 +29,15 @@ public class UserDataServiceImpl implements UserDataService {
 
     @Override
     public String getUserData(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         UserData userDataCheck = userDataRepository.findByUserid(user_id);
         return userDataCheck.toString();
     }
 
     @Override
     public String updateUserData(UserData userData) {
-        User user = userRepository.findById((long) userData.getUserid()).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
-        UserData userDataCheck = userDataRepository.findByUserid(userData.getUserid());
-        if (userDataCheck == null){
-            throw new RuntimeException("User data don't exists!");
-        }
+        CheckUserAuthorization((long) userData.getUserid());
+        getUserDataCheck(userData.getUserid());
         userDataRepository.updateUserDataRegister(
                 userData.getUserid(),
                 userData.getWeight(),
@@ -60,15 +48,24 @@ public class UserDataServiceImpl implements UserDataService {
 
     @Override
     public String deleteUserData(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
+        UserData userDataCheck = getUserDataCheck(user_id);
+        userDataRepository.delete(userDataCheck);
+        return "User data deleted!";
+    }
+
+    private UserData getUserDataCheck(int user_id) {
         UserData userDataCheck = userDataRepository.findByUserid(user_id);
         if (userDataCheck == null){
             throw new RuntimeException("User data don't exists!");
         }
-        userDataRepository.delete(userDataCheck);
-        return "User data deleted!";
+        return userDataCheck;
+    }
+
+    private void CheckUserAuthorization(long user_id) {
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            throw new RuntimeException("User not found!");
+        }
     }
 }

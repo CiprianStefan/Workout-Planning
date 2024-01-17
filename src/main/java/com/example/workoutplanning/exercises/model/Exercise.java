@@ -53,4 +53,8 @@ public class Exercise {
             throw new RuntimeException(e);
         }
     }
+
+    public void setCalories_burned_per_unit(int calories_burned_per_unit) {
+        this.calories_burned_per_unit = calories_burned_per_unit;
+    }
 }

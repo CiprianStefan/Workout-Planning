@@ -15,23 +15,48 @@ public class WorkoutController {
 
     @PostMapping("/workouts")
     public ResponseEntity<String> addWorkout(@RequestHeader int user_id, @RequestBody HashMap<String, Object> body){
-        return ResponseEntity.ok(workoutService.createWorkout(user_id, (HashMap<String, String>) body.get("exercises")));
+        try {
+            return ResponseEntity.ok(workoutService.createWorkout(
+                    user_id,
+                    (HashMap<String, String>) body.get("exercises")
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/workouts")
     public ResponseEntity<String> updateWorkout(@RequestHeader int user_id, @RequestBody HashMap<String, Object> body){
-        return ResponseEntity.ok(workoutService.updateWorkout(user_id, (int) body.get("workout_id"), (HashMap<String, String>) body.get("exercises")));
+        try {
+            return ResponseEntity.ok(workoutService.updateWorkout(
+                    user_id,
+                    (int) body.get("workout_id"),
+                    (HashMap<String, String>) body.get("exercises")
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/workouts")
     public ResponseEntity<String> deleteWorkout(@RequestHeader int user_id, @RequestBody HashMap<String, Object> body){
-        return ResponseEntity.ok(workoutService.deleteWorkout(user_id, (int) body.get("workout_id")));
+        try {
+            return ResponseEntity.ok(workoutService.deleteWorkout(
+                    user_id,
+                    (int) body.get("workout_id")
+            ));
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/workouts")
-    public ResponseEntity<String> getWorkout(@RequestHeader int user_id, @RequestBody HashMap<String, String> body) {
+    public ResponseEntity<String> getWorkout(@RequestHeader int user_id, @RequestHeader int workout_id){
         try {
-            return ResponseEntity.ok(workoutService.getWorkout(user_id, Integer.parseInt(body.get("workout_id"))));
+            return ResponseEntity.ok(workoutService.getWorkout(
+                    user_id,
+                    workout_id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

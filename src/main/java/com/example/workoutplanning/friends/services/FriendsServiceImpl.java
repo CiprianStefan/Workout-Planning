@@ -18,10 +18,7 @@ public class FriendsServiceImpl implements FriendsService{
     }
     @Override
     public String addFriend(int user_id, int friend_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         User friend = userRepository.findById((long) friend_id).orElse(null);
         if (friend == null){
             throw new RuntimeException("Friend not found!");
@@ -39,10 +36,7 @@ public class FriendsServiceImpl implements FriendsService{
 
     @Override
     public String removeFriend(int user_id, int friend_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         User friend = userRepository.findById((long) friend_id).orElse(null);
         if (friend == null){
             throw new RuntimeException("Friend not found!");
@@ -53,10 +47,14 @@ public class FriendsServiceImpl implements FriendsService{
 
     @Override
     public String getFriendsList(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
+        CheckUserAuthorization((long) user_id);
+        return friendsRepository.findAll().toString();
+    }
+
+    private void CheckUserAuthorization(long user_id) {
+        User user = userRepository.findById(user_id).orElse(null);
         if (user == null){
             throw new RuntimeException("User not found!");
         }
-        return friendsRepository.findAll().toString();
     }
 }

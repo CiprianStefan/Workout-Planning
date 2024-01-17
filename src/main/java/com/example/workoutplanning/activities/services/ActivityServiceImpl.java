@@ -28,17 +28,14 @@ public class ActivityServiceImpl implements ActivityService{
 
     @Override
     public String createActivity(int user_id, int exercise_id, int units) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         Activity activity = new Activity(user_id,exercise_id,units);
         activityRepository.save(activity);
         int goalsUpdated = goalRepository.updateGoalProgress(user_id,exercise_id);
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,exercise_id);
         int achievementsUpdated = achievementDataRepository.updateAchievementsData(user_id,exercise_id);
         achievementDataRepository.updateAchievementCompetition(user_id);
-        return "Activity deleted! \n Goals updated: " + goalsUpdated
+        return "Activity created! \n Goals updated: " + goalsUpdated
                 + "! \n Goals completed: " + goalsCompleted
                 + "! \n Achievements updated: " + achievementsUpdated
                 + "!";
@@ -46,36 +43,21 @@ public class ActivityServiceImpl implements ActivityService{
 
     @Override
     public String getActivity(int activity_id, int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
-        Activity activity = activityRepository.findById((long) activity_id).orElse(null);
-        if (activity == null){
-            throw new RuntimeException("Activity not found!");
-        }
+        CheckUserAuthorization((long) user_id);
+        Activity activity = getActivity((long) activity_id);
         return activity.toString();
     }
 
     @Override
     public String getAllActivities(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         return activityRepository.findAll().toString();
     }
 
     @Override
     public String updateActivity(int activity_id, int user_id, int exercise_id, int units) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
-        Activity activityCheck = activityRepository.findById((long) activity_id).orElse(null);
-        if (activityCheck == null){
-            throw new RuntimeException("Activity not found!");
-        }
+        CheckUserAuthorization((long) user_id);
+        getActivity((long) activity_id);
         activityRepository.updateActivity(
                 activity_id,
                 user_id,
@@ -85,7 +67,7 @@ public class ActivityServiceImpl implements ActivityService{
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,exercise_id);
         int achievementsUpdated = achievementDataRepository.updateAchievementsData(user_id,exercise_id);
         achievementDataRepository.updateAchievementCompetition(user_id);
-        return "Activity deleted! \n Goals updated: " + goalsUpdated
+        return "Activity updated! \n Goals updated: " + goalsUpdated
                 + "! \n Goals completed: " + goalsCompleted
                 + "! \n Achievements updated: " + achievementsUpdated
                 + "!";
@@ -93,14 +75,8 @@ public class ActivityServiceImpl implements ActivityService{
 
     @Override
     public String deleteActivity(int activity_id, int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
-        Activity activity = activityRepository.findById((long) activity_id).orElse(null);
-        if (activity == null){
-            throw new RuntimeException("Activity not found!");
-        }
+        CheckUserAuthorization((long) user_id);
+        Activity activity = getActivity((long) activity_id);
         activityRepository.deleteById((long) activity_id);
         int goalsUpdated = goalRepository.updateGoalProgress(user_id,activity.getExercise_id());
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,activity.getExercise_id());
@@ -110,5 +86,20 @@ public class ActivityServiceImpl implements ActivityService{
                 + "! \n Goals completed: " + goalsCompleted
                 + "! \n Achievements updated: " + achievementsUpdated
                 + "!";
+    }
+
+    private Activity getActivity(long activity_id) {
+        Activity activity = activityRepository.findById(activity_id).orElse(null);
+        if (activity == null){
+            throw new RuntimeException("Activity not found!");
+        }
+        return activity;
+    }
+
+    private void CheckUserAuthorization(long user_id) {
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            throw new RuntimeException("User not found!");
+        }
     }
 }

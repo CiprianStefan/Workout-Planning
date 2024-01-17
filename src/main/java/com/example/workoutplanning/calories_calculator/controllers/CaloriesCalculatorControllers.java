@@ -1,6 +1,6 @@
-package com.example.workoutplanning.achievements.calories_calculator.controllers;
+package com.example.workoutplanning.calories_calculator.controllers;
 
-import com.example.workoutplanning.achievements.calories_calculator.services.CaloriesCalculatorService;
+import com.example.workoutplanning.calories_calculator.services.CaloriesCalculatorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;

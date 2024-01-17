@@ -18,10 +18,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public String addReview(int user_id, String description) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         int reviewCount = reviewRepository.findAll().stream().filter(review -> review.getUser_id() == user_id).toList().size();
         if (reviewCount > 0){
             throw new RuntimeException("Review already exists!");
@@ -35,10 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public String updateReview(int user_id, String description) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         int reviewCount = reviewRepository.findAll().stream().filter(review -> review.getUser_id() == user_id).toList().size();
         if (reviewCount == 0){
             throw new RuntimeException("Review not found!");
@@ -53,10 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public String deleteReview(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         int reviewCount = reviewRepository.findAll().stream().filter(review -> review.getUser_id() == user_id).toList().size();
         if (reviewCount == 0){
             throw new RuntimeException("Review not found!");
@@ -65,8 +56,16 @@ public class ReviewServiceImpl implements ReviewService {
         return "Review deleted!";
     }
 
+
     @Override
     public String getAllReviews() {
         return reviewRepository.findAll().toString();
+    }
+
+    private void CheckUserAuthorization(long user_id) {
+        User user = userRepository.findById(user_id).orElse(null);
+        if (user == null){
+            throw new RuntimeException("User not found!");
+        }
     }
 }

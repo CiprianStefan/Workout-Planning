@@ -34,9 +34,4 @@ public class AchievementController {
         }
     }
 
-    @GetMapping("/achievements_test")
-    public String updateAchievementsData(){
-        achievementService.initAchievementsDataForUser(1);
-        return "Hello";
-    }
 }

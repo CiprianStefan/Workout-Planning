@@ -1,4 +1,4 @@
-package com.example.workoutplanning.achievements.calories_calculator.services;
+package com.example.workoutplanning.calories_calculator.services;
 
 import com.example.workoutplanning.activities.model.Activity;
 import com.example.workoutplanning.activities.repositories.ActivityRepository;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.Set;
 
 @Service
 public class CaloriesCalculatorServiceImpl implements CaloriesCalculatorService {

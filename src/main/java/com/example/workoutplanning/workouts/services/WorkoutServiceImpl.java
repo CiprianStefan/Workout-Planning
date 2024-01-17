@@ -1,5 +1,7 @@
 package com.example.workoutplanning.workouts.services;
 
+import com.example.workoutplanning.exercises.model.Exercise;
+import com.example.workoutplanning.exercises.repositories.ExerciseRepository;
 import com.example.workoutplanning.users.repositories.UserRepository;
 import com.example.workoutplanning.workouts.model.Workout;
 import com.example.workoutplanning.workouts.repositories.WorkoutRepository;
@@ -12,19 +14,19 @@ import java.util.List;
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
 
-    WorkoutRepository workoutRepository;
     UserRepository userRepository;
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository, UserRepository userRepository) {
-        this.workoutRepository = workoutRepository;
+    WorkoutRepository workoutRepository;
+    ExerciseRepository exerciseRepository;
+    public WorkoutServiceImpl( UserRepository userRepository, WorkoutRepository workoutRepository, ExerciseRepository exerciseRepository) {
         this.userRepository = userRepository;
+        this.workoutRepository = workoutRepository;
+        this.exerciseRepository = exerciseRepository;
     }
 
     @Override
     public String createWorkout(int user_id, HashMap<String, String> body) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
+        CheckExercises(body);
         workoutRepository.save(new Workout(
                 user_id,
                 body
@@ -32,16 +34,16 @@ public class WorkoutServiceImpl implements WorkoutService {
         return "Workout created!";
     }
 
+
+
     @Override
     public String updateWorkout(int user_id, int workout_id, HashMap<String, String> body) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
         if (workout == null){
             throw new RuntimeException("Workout not found!");
         }
+        CheckExercises(body);
         Workout updatedWorkout = new Workout(
                 user_id,
                 body
@@ -52,10 +54,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public String deleteWorkout(int user_id, int workout_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
         if (workout == null){
             throw new RuntimeException("Workout not found!");
@@ -66,10 +65,7 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public String getWorkout(int user_id, int workout_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
-        if (user == null){
-            throw new RuntimeException("User not found!");
-        }
+        CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
         if (workout == null){
             throw new RuntimeException("Workout not found!");
@@ -79,15 +75,33 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     @Override
     public String getAllWorkouts(int user_id) {
-        User user = userRepository.findById((long) user_id).orElse(null);
+        CheckUserAuthorization((long) user_id);
+        List<Workout> workouts = workoutRepository.findAll();
+        if (workouts == null){
+            throw new RuntimeException("No workout found!");
+        }
+        return workouts.toString();
+    }
+
+    private void CheckUserAuthorization(long user_id) {
+        User user = userRepository.findById(user_id).orElse(null);
         if (user == null){
             throw new RuntimeException("User not found!");
         }
-        List<Workout> workouts = workoutRepository.findAll();
-        if (workouts == null){
-            throw new RuntimeException("Workout not found!");
+    }
+
+    private void CheckExercises(HashMap<String, String> body) {
+        for (String exercise : body.keySet()) {
+            if (exercise == null || exercise.isEmpty()) {
+                throw new RuntimeException("Exercise name cannot be empty!");
+            }
+            if (body.get(exercise) == null || body.get(exercise).isEmpty()) {
+                throw new RuntimeException("Exercise unit cannot be empty!");
+            }
+            if (exerciseRepository.findById((long) Integer.parseInt(exercise)).orElse(null) == null) {
+                throw new RuntimeException("Exercise not found!");
+            }
         }
-        return workouts.toString();
     }
 
 }

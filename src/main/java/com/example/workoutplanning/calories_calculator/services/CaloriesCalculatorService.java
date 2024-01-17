@@ -1,4 +1,4 @@
-package com.example.workoutplanning.achievements.calories_calculator.services;
+package com.example.workoutplanning.calories_calculator.services;
 
 public interface CaloriesCalculatorService {
     int calculateActivityCalories(int user_id, int activity_id);
