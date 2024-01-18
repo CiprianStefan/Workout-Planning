@@ -2,7 +2,6 @@ package com.example.workoutplanning.exercises;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 import com.example.workoutplanning.exercises.model.Exercise;
 import com.example.workoutplanning.exercises.repositories.ExerciseRepository;
 import com.example.workoutplanning.exercises.services.ExerciseServiceImpl;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.List;
 
 class ExerciseServiceImplTest {

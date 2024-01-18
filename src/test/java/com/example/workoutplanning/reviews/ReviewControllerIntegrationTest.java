@@ -1,7 +1,6 @@
 package com.example.workoutplanning.reviews;
 
 import com.example.workoutplanning.reviews.services.ReviewService;
-import com.example.workoutplanning.users.services.UserDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ReviewControllerIntegrationTest {
+class ReviewControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

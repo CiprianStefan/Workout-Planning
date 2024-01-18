@@ -1,8 +1,6 @@
 package com.example.workoutplanning.goals;
 
 import com.example.workoutplanning.goals.services.GoalService;
-import com.example.workoutplanning.reviews.services.ReviewService;
-import com.example.workoutplanning.users.services.UserDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +10,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class GoalControllerIntegrationTest {
+class GoalControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

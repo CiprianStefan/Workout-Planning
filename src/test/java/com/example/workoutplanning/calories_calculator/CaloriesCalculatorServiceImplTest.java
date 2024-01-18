@@ -9,16 +9,12 @@ import com.example.workoutplanning.users.model.User;
 import com.example.workoutplanning.users.repositories.UserRepository;
 import com.example.workoutplanning.workouts.model.Workout;
 import com.example.workoutplanning.workouts.repositories.WorkoutRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.HashMap;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;

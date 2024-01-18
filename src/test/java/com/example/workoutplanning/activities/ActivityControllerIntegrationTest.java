@@ -1,10 +1,6 @@
 package com.example.workoutplanning.activities;
 
 import com.example.workoutplanning.activities.services.ActivityService;
-import com.example.workoutplanning.calories_calculator.services.CaloriesCalculatorService;
-import com.example.workoutplanning.exercises.services.ExerciseService;
-import com.example.workoutplanning.friends.services.FriendsService;
-import com.example.workoutplanning.users.services.UserDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 import java.util.Map;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ActivityControllerIntegrationTest {
+class ActivityControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

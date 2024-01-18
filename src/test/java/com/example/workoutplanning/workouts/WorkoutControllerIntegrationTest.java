@@ -1,6 +1,5 @@
 package com.example.workoutplanning.workouts;
 
-import com.example.workoutplanning.users.services.UserDataService;
 import com.example.workoutplanning.workouts.services.WorkoutService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 import java.util.Map;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class WorkoutControllerIntegrationTest {
+class WorkoutControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -1,7 +1,5 @@
 package com.example.workoutplanning.achievements;
 
-import com.example.workoutplanning.achievements.model.Achievement;
-import com.example.workoutplanning.achievements.model.AchievementData;
 import com.example.workoutplanning.achievements.repositories.AchievementDataRepository;
 import com.example.workoutplanning.achievements.repositories.AchievementRepository;
 import com.example.workoutplanning.achievements.services.AchievementServiceImpl;
@@ -12,11 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
