@@ -40,3 +40,4 @@
 * Give the ability to user to add or remove friends.
 * Let the user see a friend profile.
 
+![DB Diagram](/Workout-Planning_DB_diagram.png "DB Diagram")
