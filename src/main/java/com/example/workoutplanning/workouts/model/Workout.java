@@ -1,15 +1,20 @@
 package com.example.workoutplanning.workouts.model;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashMap;
 
-
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "workout_plans")
 public class Workout {
@@ -23,8 +28,6 @@ public class Workout {
     @Column
     private String exercises_and_units;
 
-    public Workout() {
-    }
 
     public Workout(int user_id, HashMap exercises_and_units) {
         this.user_id = user_id;
@@ -39,26 +42,6 @@ public class Workout {
     public Workout(int user_id, String exercises_and_units) {
         this.user_id = user_id;
         this.exercises_and_units = exercises_and_units;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setExercises_and_units(String exercises_and_units) {
-        this.exercises_and_units = exercises_and_units;
-    }
-
-    public String getExercises_and_units() {
-        return exercises_and_units;
     }
 
     public String toString() {
