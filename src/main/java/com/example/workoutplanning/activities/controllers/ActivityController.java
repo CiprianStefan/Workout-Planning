@@ -1,5 +1,6 @@
 package com.example.workoutplanning.activities.controllers;
 
+import com.example.workoutplanning.activities.model.Activity;
 import com.example.workoutplanning.activities.services.ActivityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,13 @@ public class ActivityController {
     ActivityService activityService;
     public ActivityController(ActivityService activityService) {this.activityService = activityService;}
 
-    @PostMapping("/activities")
-    public ResponseEntity<String> addActivity(@RequestHeader int user_id, @RequestBody Map<String,String> body){
+        @PostMapping("/activities")
+    public ResponseEntity<String> addActivity(@RequestHeader int user_id, @RequestBody Activity activity){
         try{
             return ResponseEntity.ok(activityService.createActivity(
                     user_id,
-                    Integer.parseInt(body.get("exercise_id")),
-                    Integer.parseInt(body.get("units"))));
+                    activity.getExercise_id(),
+                    activity.getUnits()));
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -36,13 +37,13 @@ public class ActivityController {
     }
 
     @PutMapping("/activities")
-    public ResponseEntity<String> updateActivity(@RequestHeader int user_id, @RequestBody Map<String,String> body){
+    public ResponseEntity<String> updateActivity(@RequestHeader int user_id, @RequestBody Activity activity){
         try{
             return ResponseEntity.ok(activityService.updateActivity(
-                    Integer.parseInt(body.get("activity_id")),
+                    activity.getId(),
                     user_id,
-                    Integer.parseInt(body.get("exercise_id")),
-                    Integer.parseInt(body.get("units"))));
+                    activity.getExercise_id(),
+                    activity.getUnits()));
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

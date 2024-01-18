@@ -1,5 +1,6 @@
 package com.example.workoutplanning.goals.controllers;
 
+import com.example.workoutplanning.goals.model.Goal;
 import com.example.workoutplanning.goals.services.GoalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ public class GoalController {
 
 
     @PostMapping("/goals")
-    public ResponseEntity<String> addGoal(@RequestHeader int user_id, @RequestBody Map<String,String> body){
+    public ResponseEntity<String> addGoal(@RequestHeader int user_id, @RequestBody Goal goal){
         try{
             return ResponseEntity.ok(goalService.createGoal(
                     user_id,
-                    Integer.parseInt(body.get("exercise_id")),
-                    Integer.parseInt(body.get("units")),
-                    LocalDate.parse(body.get("date_start")),
-                    LocalDate.parse(body.get("date_end"))));
+                    goal.getExercise_id(),
+                    goal.getUnits(),
+                    goal.getDate_start(),
+                    goal.getDate_end()));
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -51,15 +52,15 @@ public class GoalController {
     }
 
     @PutMapping("/goals")
-    public ResponseEntity<String> updateGoal(@RequestHeader int user_id, @RequestBody Map<String,String> body){
+    public ResponseEntity<String> updateGoal(@RequestHeader int user_id, @RequestBody Goal goal){
         try{
             return ResponseEntity.ok(goalService.updateGoalGeneralInformation(
-                    Integer.parseInt(body.get("goal_id")),
+                    goal.getId(),
                     user_id,
-                    Integer.parseInt(body.get("exercise_id")),
-                    Integer.parseInt(body.get("units")),
-                    LocalDate.parse(body.get("date_start")),
-                    LocalDate.parse(body.get("date_end"))));
+                    goal.getExercise_id(),
+                    goal.getUnits(),
+                    goal.getDate_start(),
+                    goal.getDate_end()));
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -67,7 +68,7 @@ public class GoalController {
     }
 
     @DeleteMapping("/goals")
-    public ResponseEntity<String> deleteGoal(@RequestHeader int user_id, @RequestBody Map<String,String> body){
+    public ResponseEntity<String> deleteGoal(@RequestHeader int user_id, @RequestBody Map<String, String> body){
         try{
             return ResponseEntity.ok(goalService.deleteGoal(Integer.parseInt(body.get("goal_id")), user_id));
         }

@@ -1,5 +1,6 @@
 package com.example.workoutplanning.friends.controllers;
 
+import com.example.workoutplanning.friends.model.Friend;
 import com.example.workoutplanning.friends.services.FriendsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,11 @@ public class FriendsController {
     }
 
     @PostMapping("/friends")
-    public ResponseEntity<String> addFriend(@RequestHeader int user_id, @RequestBody HashMap<String, String> body){
+    public ResponseEntity<String> addFriend(@RequestHeader int user_id, @RequestBody Friend friend){
         try{
             return ResponseEntity.ok(friendsService.addFriend(
                     user_id,
-                    Integer.parseInt(body.get("friend_id"))
+                    friend.getFriend_id()
             ));
         }
         catch (Exception e){

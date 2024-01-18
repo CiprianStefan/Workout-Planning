@@ -12,6 +12,8 @@ import com.example.workoutplanning.users.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.tags.form.AbstractCheckedElementTag;
 
+import java.util.List;
+
 @Service
 public class ActivityServiceImpl implements ActivityService{
 
@@ -51,13 +53,18 @@ public class ActivityServiceImpl implements ActivityService{
     @Override
     public String getAllActivities(int user_id) {
         CheckUserAuthorization((long) user_id);
-        return activityRepository.findAll().toString();
+        List<Activity> activities = activityRepository.findAll();
+        activities.removeIf(activity -> activity.getUser_id() != user_id);
+        return activities.toString();
     }
 
     @Override
     public String updateActivity(int activity_id, int user_id, int exercise_id, int units) {
         CheckUserAuthorization((long) user_id);
-        getActivity((long) activity_id);
+        Activity activity = getActivity((long) activity_id);
+        if (activity.getUser_id() != user_id){
+            throw new RuntimeException("User not authorized!");
+        }
         activityRepository.updateActivity(
                 activity_id,
                 user_id,
@@ -77,6 +84,9 @@ public class ActivityServiceImpl implements ActivityService{
     public String deleteActivity(int activity_id, int user_id) {
         CheckUserAuthorization((long) user_id);
         Activity activity = getActivity((long) activity_id);
+        if (activity.getUser_id() != user_id){
+            throw new RuntimeException("User not authorized!");
+        }
         activityRepository.deleteById((long) activity_id);
         int goalsUpdated = goalRepository.updateGoalProgress(user_id,activity.getExercise_id());
         int goalsCompleted = goalRepository.updateGoalCompletion(user_id,activity.getExercise_id());

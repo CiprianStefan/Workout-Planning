@@ -58,12 +58,15 @@ class GoalServiceImplTest {
         // Arrange
         int goalId = 1;
         int userId = 2;
+        Goal goal = new Goal();
+        goal.setId(goalId);
+        goal.setUser_id(userId);
 
         // Mock user authorization
         when(userRepository.findById((long) userId)).thenReturn(Optional.of(new User()));
 
         // Mock goal retrieval
-        when(goalRepository.findById((long) goalId)).thenReturn(Optional.of(new Goal()));
+        when(goalRepository.findById((long) goalId)).thenReturn(Optional.of(goal));
 
         // Act
         String result = goalService.getGoal(goalId, userId);
@@ -115,9 +118,11 @@ class GoalServiceImplTest {
     public void testGetGoal_GoalFound() {
         // Arrange
         long goalId = 1;
+        Goal goal = new Goal();
+        goal.setId((int)goalId);
 
         // Mock goal found
-        when(goalRepository.findById(goalId)).thenReturn(Optional.of(new Goal()));
+        when(goalRepository.findById(goalId)).thenReturn(Optional.of(goal));
 
         // Act
         assertDoesNotThrow(() -> goalService.checkAndGetGoal(goalId));
@@ -146,9 +151,15 @@ class GoalServiceImplTest {
     @Test
     public void testUpdateGoalGeneralInformation() {
 
+        int userId = 1;
+        int goalId = 1;
+        Goal goal = new Goal();
+        goal.setId(goalId);
+        goal.setUser_id(userId);
+
         // Mock
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(goalRepository.findById(anyLong())).thenReturn(Optional.of(new Goal()));
+        when(goalRepository.findById(anyLong())).thenReturn(Optional.of(goal));
 
 
         // Act
@@ -186,9 +197,15 @@ class GoalServiceImplTest {
     @Test
     public void testDeleteGoal() {
 
+        int userId = 1;
+        int goalId = 1;
+        Goal goal = new Goal();
+        goal.setId(goalId);
+        goal.setUser_id(userId);
+
         // Mock
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(goalRepository.findById(anyLong())).thenReturn(Optional.of(new Goal()));
+        when(goalRepository.findById(anyLong())).thenReturn(Optional.of(goal));
 
         // Act
         String result = goalService.deleteGoal(1, 1);

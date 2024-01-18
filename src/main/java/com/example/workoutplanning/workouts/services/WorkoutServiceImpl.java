@@ -40,7 +40,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public String updateWorkout(int user_id, int workout_id, HashMap<String, String> body) {
         CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
-        if (workout == null){
+        if (workout == null || workout.getUser_id() != user_id){
             throw new RuntimeException("Workout not found!");
         }
         CheckExercises(body);
@@ -56,7 +56,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public String deleteWorkout(int user_id, int workout_id) {
         CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
-        if (workout == null){
+        if (workout == null || workout.getUser_id() != user_id){
             throw new RuntimeException("Workout not found!");
         }
         workoutRepository.deleteById((long) workout_id);
@@ -67,7 +67,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     public String getWorkout(int user_id, int workout_id) {
         CheckUserAuthorization((long) user_id);
         Workout workout = workoutRepository.findById((long) workout_id).orElse(null);
-        if (workout == null){
+        if (workout == null || workout.getUser_id() != user_id){
             throw new RuntimeException("Workout not found!");
         }
         return workout.toString();
@@ -80,6 +80,7 @@ public class WorkoutServiceImpl implements WorkoutService {
         if (workouts == null){
             throw new RuntimeException("No workout found!");
         }
+        workouts.removeIf(workout -> workout.getUser_id() != user_id);
         return workouts.toString();
     }
 

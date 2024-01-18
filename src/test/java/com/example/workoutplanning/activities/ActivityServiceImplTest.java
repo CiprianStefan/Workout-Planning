@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -123,7 +125,7 @@ class ActivityServiceImplTest {
     public void testGetAllActivities() {
         //Mocking
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(activityRepository.findAll()).thenReturn(java.util.List.of(new Activity(), new Activity()));
+        when(activityRepository.findAll()).thenReturn(new ArrayList<>(List.of(new Activity(), new Activity())));
 
         //Execution
         String result = activityService.getAllActivities(1);
@@ -149,8 +151,13 @@ class ActivityServiceImplTest {
     @Test
     public void testUpdateActivity() {
         //Mocking
+        int userId = 1;
+        int activityId = 1;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setUser_id(userId);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(activityRepository.findById(anyLong())).thenReturn(Optional.of(new Activity()));
+        when(activityRepository.findById(anyLong())).thenReturn(Optional.of(activity));
         when(goalRepository.updateGoalProgress(anyInt(), anyInt())).thenReturn(1);
         when(goalRepository.updateGoalCompletion(anyInt(),anyInt())).thenReturn(1);
         when(achievementDataRepository.updateAchievementsData(anyInt(),anyInt())).thenReturn(1);
@@ -203,8 +210,13 @@ class ActivityServiceImplTest {
     @Test
     public void testDeleteActivity() {
         //Mocking
+        int userId = 1;
+        int activityId = 1;
+        Activity activity = new Activity();
+        activity.setId(activityId);
+        activity.setUser_id(userId);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(new User()));
-        when(activityRepository.findById(anyLong())).thenReturn(Optional.of(new Activity()));
+        when(activityRepository.findById(anyLong())).thenReturn(Optional.of(activity));
         when(goalRepository.updateGoalProgress(anyInt(), anyInt())).thenReturn(1);
         when(goalRepository.updateGoalCompletion(anyInt(),anyInt())).thenReturn(1);
         when(achievementDataRepository.updateAchievementsData(anyInt(),anyInt())).thenReturn(1);

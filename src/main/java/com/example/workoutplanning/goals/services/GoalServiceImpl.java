@@ -7,6 +7,7 @@ import com.example.workoutplanning.users.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class GoalServiceImpl implements GoalService{
@@ -35,13 +36,21 @@ public class GoalServiceImpl implements GoalService{
     @Override
     public String getAllGoals(int user_id) {
         CheckUserAuthorization((long) user_id);
-        return goalRepository.findAll().toString();
+        List<Goal> goals = goalRepository.findAll();
+        if (goals.isEmpty()){
+            throw new RuntimeException("No goals found!");
+        }
+        goals.removeIf(goal -> goal.getUser_id() != user_id);
+        return goals.toString();
     }
 
     @Override
     public String updateGoalGeneralInformation(int goal_id, int user_id, int exercise_id, int units, LocalDate date_start, LocalDate date_end) {
         CheckUserAuthorization((long) user_id);
-        checkAndGetGoal((long) goal_id);
+        Goal goal = checkAndGetGoal((long) goal_id);
+        if (goal.getUser_id() != user_id){
+            throw new RuntimeException("User not authorized!");
+        }
         goalRepository.updateGoalGeneralInformation(goal_id,user_id,exercise_id,units,date_start,date_end);
         return "Goal updated!";
     }
@@ -50,6 +59,9 @@ public class GoalServiceImpl implements GoalService{
     public String deleteGoal(int goal_id, int user_id) {
         CheckUserAuthorization((long) user_id);
         Goal goal = checkAndGetGoal((long) goal_id);
+        if (goal.getUser_id() != user_id){
+            throw new RuntimeException("User not authorized!");
+        }
         goalRepository.delete(goal);
         return "Goal deleted!";
     }
@@ -63,7 +75,7 @@ public class GoalServiceImpl implements GoalService{
 
     public Goal checkAndGetGoal(long goal_id) {
         Goal goal = goalRepository.findById(goal_id).orElse(null);
-        if (goal == null){
+        if (goal == null || goal.getId() != goal_id){
             throw new RuntimeException("Goal not found!");
         }
         return goal;

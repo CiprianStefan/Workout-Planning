@@ -48,7 +48,9 @@ public class FriendsServiceImpl implements FriendsService{
     @Override
     public String getFriendsList(int user_id) {
         CheckUserAuthorization((long) user_id);
-        return friendsRepository.findAll().toString();
+        List<Friend> friends = friendsRepository.findAll();
+        friends.removeIf(friend -> friend.getUser_id() != user_id);
+        return friends.toString();
     }
 
     private void CheckUserAuthorization(long user_id) {

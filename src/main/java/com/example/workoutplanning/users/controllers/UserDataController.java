@@ -17,13 +17,13 @@ public class UserDataController {
     }
 
     @PostMapping("/userdata")
-    public ResponseEntity<String> setUserData(@RequestHeader int user_id, @RequestBody Map<String, String> body){
+    public ResponseEntity<String> setUserData(@RequestHeader int user_id, @RequestBody UserData userData){
         try{
             return ResponseEntity.ok(userDataService.createUserData(new UserData(
                     user_id,
-                    Integer.parseInt(body.get("weight")),
-                    Integer.parseInt(body.get("height")),
-                    Integer.parseInt(body.get("age"))
+                    userData.getWeight(),
+                    userData.getHeight(),
+                    userData.getAge()
             )));
         }
         catch (Exception e){
@@ -42,13 +42,13 @@ public class UserDataController {
     }
 
     @PutMapping("/userdata")
-    public ResponseEntity<String> updateUserData(@RequestHeader int user_id, @RequestBody Map<String, String> body){
+    public ResponseEntity<String> updateUserData(@RequestHeader int user_id, @RequestBody UserData userData){
         try{
             return ResponseEntity.ok(userDataService.updateUserData(new UserData(
                     user_id,
-                    Integer.parseInt(body.get("weight")),
-                    Integer.parseInt(body.get("height")),
-                    Integer.parseInt(body.get("age"))
+                    userData.getWeight(),
+                    userData.getHeight(),
+                    userData.getAge()
             )));
         }
         catch (Exception e){

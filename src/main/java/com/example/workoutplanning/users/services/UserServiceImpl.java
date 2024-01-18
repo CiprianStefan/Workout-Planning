@@ -6,6 +6,8 @@ import com.example.workoutplanning.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -18,6 +20,18 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String createUser(String Username, String Email, String Password){
+        if (Username == null || Username.isEmpty()){
+            throw new RuntimeException("Username is empty!");
+        }
+        if (Email == null || Email.isEmpty()){
+            throw new RuntimeException("Email is empty!");
+        }
+        if (Password == null || Password.isEmpty()){
+            throw new RuntimeException("Password is empty!");
+        }
+        if (!Pattern.compile(".*@.*\\..*", Pattern.CASE_INSENSITIVE).matcher(Email).matches()){
+            throw new RuntimeException("Email is not valid!");
+        }
         User userCheckUsername = userRepository.findByUsername(Username);
         if (userCheckUsername != null){
             throw new RuntimeException("User already exists!");

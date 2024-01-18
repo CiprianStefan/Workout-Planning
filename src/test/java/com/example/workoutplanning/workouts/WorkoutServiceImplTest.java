@@ -94,10 +94,13 @@ class WorkoutServiceImplTest {
         int workoutId = 1;
         HashMap<String, String> body = new HashMap<>();
         body.put("1", "1");
+        Workout workout = new Workout();
+        workout.setId(workoutId);
+        workout.setUser_id(userId);
 
         // Mocking behavior
         when(userRepository.findById((long) userId)).thenReturn(Optional.of(new User()));
-        when(workoutRepository.findById((long) workoutId)).thenReturn(Optional.of(new Workout()));
+        when(workoutRepository.findById((long) workoutId)).thenReturn(Optional.of(workout));
         when(exerciseRepository.findById(1L)).thenReturn(Optional.of(new Exercise()));
 
         // Act
@@ -163,10 +166,13 @@ class WorkoutServiceImplTest {
         // Arrange
         int userId = 1;
         int workoutId = 1;
+        Workout workout = new Workout();
+        workout.setId(workoutId);
+        workout.setUser_id(userId);
 
         // Mocking behavior
         when(userRepository.findById((long) userId)).thenReturn(Optional.of(new User()));
-        when(workoutRepository.findById((long) workoutId)).thenReturn(Optional.of(new Workout()));
+        when(workoutRepository.findById((long) workoutId)).thenReturn(Optional.of(workout));
 
         // Act
         String result = workoutService.deleteWorkout(userId, workoutId);

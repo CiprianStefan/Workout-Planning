@@ -1,5 +1,6 @@
 package com.example.workoutplanning.reviews.controllers;
 
+import com.example.workoutplanning.reviews.model.Review;
 import com.example.workoutplanning.reviews.services.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,11 @@ public class ReviewController {
     }
 
     @PostMapping("/reviews")
-    public ResponseEntity<String> addReview(@RequestHeader int user_id, @RequestBody HashMap<String, String> body){
+    public ResponseEntity<String> addReview(@RequestHeader int user_id, @RequestBody Review review){
         try {
             return ResponseEntity.ok(reviewService.addReview(
                     user_id,
-                    body.get("description")
+                    review.getDescription()
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -36,11 +37,11 @@ public class ReviewController {
     }
 
     @PutMapping("/reviews")
-    public ResponseEntity<String> updateReview(@RequestHeader int user_id, @RequestBody HashMap<String, String> body){
+    public ResponseEntity<String> updateReview(@RequestHeader int user_id, @RequestBody Review review){
         try {
             return ResponseEntity.ok(reviewService.updateReview(
                     user_id,
-                    body.get("description")
+                    review.getDescription()
             ));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
